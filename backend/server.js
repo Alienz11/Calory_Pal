@@ -4,7 +4,7 @@ require("dotenv").config();
 
 //Linking routes folder and file
 const calorydatasRoutes = require("./routes/caloryData");
-
+const userRoutes = require("./routes/user");
 
 //Express App created
 const app = express();
@@ -18,7 +18,7 @@ app.use((req, res, next) => {
 
 //Routes
 app.use("/api/calories", calorydatasRoutes);
-
+app.use("/api/user", userRoutes);
 
 //Connecting to MongoDB using mongoose
 mongoose
