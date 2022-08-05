@@ -3,8 +3,9 @@ const mongoose = require("mongoose");
 
 //GET all calorydatas
 const getCaloryDatas = async (req, res) => {
+  const user_id = req.user._id;
   try {
-    const calorydatas = await CaloryData.find().sort({
+    const calorydatas = await CaloryData.find({ user_id }).sort({
       createdAt: -1,
     }); //Listing the database in descending order (Newest at the top)
     res.status(200).json(calorydatas);
@@ -52,10 +53,12 @@ const createCaloryData = async (req, res) => {
   }
   //add doc to db
   try {
+    const user_id = req.user._id;
     const calorydata = await CaloryData.create({
       food,
       meal,
       calories,
+      user_id,
     });
     res.status(200).json(calorydata);
   } catch (error) {
