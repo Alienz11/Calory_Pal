@@ -23,13 +23,12 @@ const caloryDatasSchema = new Schema(
         if (value < 0) throw new Error("Negative calories aren't real.");
       },
     },
-},
-{ timestamps: true }
+    user_id: {
+      type: String,
+      required: true,
+    },
+  },
+  { timestamps: true }
 );
 
 module.exports = mongoose.model("CaloryData", caloryDatasSchema);
-
-// user_id: {
-//   type: String,
-//   required: true,
-// },
