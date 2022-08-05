@@ -8,6 +8,10 @@ const {
   updateCaloryData,
 } = require("../controllers/caloryDataController");
 
+const userAuth = require("../middlewares/userAuth");
+
+// require auth for all calory data routes
+router.use(userAuth);
 
 //Get all calory datas
 router.get("/", getCaloryDatas);
