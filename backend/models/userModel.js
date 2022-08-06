@@ -22,7 +22,7 @@ const userSchema = new Schema({
 
 //Static Signup Method
 userSchema.statics.signup = async function (fullname, email, password) {
-  console.log(arguments);
+  console.log(arguments); //Testing Output from postman POST requests
   if (!fullname || !email || !password) {
     throw Error("All field must be filled");
   }
