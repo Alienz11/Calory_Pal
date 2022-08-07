@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const Container = styled.div`
+export const Container = styled.form`
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -9,7 +9,7 @@ export const Container = styled.div`
 `;
 
 //HTML form that handles submissions
-export const FormContainer = styled.form`
+export const FormContainer = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -17,7 +17,7 @@ export const FormContainer = styled.form`
 `;
 
 //Design for the muted links
-export const MutedLink = styled.a`
+export const MutedLink = styled.span`
   font-size: 11px;
   color: rgba(200, 200, 200, 0.8);
   font-weight: 500;
@@ -25,7 +25,7 @@ export const MutedLink = styled.a`
 `;
 
 //Design for the bold links
-export const BoldLink = styled.a`
+export const BoldLink = styled.span`
   font-size: 11px;
   color: rgb(113, 9, 184);
   font-weight: 500;
