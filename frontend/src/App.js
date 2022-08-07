@@ -44,20 +44,3 @@ function App() {
 }
 
 export default App;
-
-// function App() {
-//   const { user } = useAuthContext();
-//   return (
-//     <BrowserRouter>
-//       <Navbar />
-//       <div>
-//         <Routes>
-//           <Route path="/" element={user ? <HomePage /> : <Navigate to="/" />} />
-//         </Routes>
-//       </div>
-//       <AppContainer>
-//         <AnimationBox />
-//       </AppContainer>
-//     </BrowserRouter>
-//   );
-// }
