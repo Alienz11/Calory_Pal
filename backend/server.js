@@ -4,8 +4,8 @@ require("dotenv").config();
 const path = require("path");
 
 //Linking routes folder and file
-const calorydatasRoutes = require("./backend/routes/caloryData");
-const userRoutes = require("./backend/routes/user");
+const calorydatasRoutes = require("./routes/caloryData");
+const userRoutes = require("./routes/user");
 
 //Express App created
 const app = express();
