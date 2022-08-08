@@ -7,10 +7,12 @@ import {
   FormContainer,
   Input,
   MutedLink,
+  DisplayError,
   SubmitButton,
 } from "./Collective";
 import { Marginer } from "../marginer/marginMaker";
 import { AnimationContext } from "./animationContext";
+import "../../index.css";
 
 export function SignupForm(props) {
   const [fullname, setFullname] = useState("");
@@ -57,7 +59,6 @@ export function SignupForm(props) {
           value={comfirm_password}
           placeholder="Confirm Password"
         />
-        {error && <div className="error">{error}</div>}
       </FormContainer>
       <Marginer direction="vertical" margin={10} />
       <SubmitButton type="submit" disabled={isLoading}>
@@ -70,6 +71,7 @@ export function SignupForm(props) {
           Login
         </BoldLink>
       </MutedLink>
+      <DisplayError>{error}</DisplayError>
     </Container>
   );
 }

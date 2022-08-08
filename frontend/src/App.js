@@ -6,7 +6,7 @@ import { useAuthContext } from "./hooks/useAuthContext";
 import HomePage from "./pages/HomePage";
 
 const AppContainer = styled.div`
-  height: 50em;
+  height: 40em;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -19,7 +19,7 @@ function App() {
   return (
     <BrowserRouter>
       <Navbar />
-      <div>
+      <div className="pages">
         <Routes>
           <Route
             path="/"

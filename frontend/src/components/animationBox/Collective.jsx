@@ -16,6 +16,15 @@ export const FormContainer = styled.div`
   box-shadow: 0px 0px 2.5px rgba(15, 15, 15, 0.19);
 `;
 
+export const DisplayError = styled.div`
+  font-size: 11px;
+  border-color: rgb(231, 25, 90);
+  border: 1px;
+  color: rgb(231, 25, 90);
+  text-decoration: none;
+  margin: 0 4px;
+`;
+
 //Design for the muted links
 export const MutedLink = styled.span`
   font-size: 11px;

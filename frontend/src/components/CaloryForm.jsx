@@ -58,7 +58,7 @@ const CaloryForm = () => {
         type="text"
         onChange={(e) => setFood(e.target.value)}
         value={food}
-        className={emptyFields.includes("food") ? "error" : ""}
+        className={emptyFields.includes("food") ? "error" : "inner"}
       />
       <label>Meal:</label>
       <select onChange={(e) => setMeal(e.target.value)} value={meal}>
@@ -73,7 +73,7 @@ const CaloryForm = () => {
         type="number"
         onChange={(e) => setCalories(e.target.value)}
         value={calories}
-        className={emptyFields.includes("calories") ? "error" : ""}
+        className={emptyFields.includes("calories") ? "error" : "inner"}
       />
       <button>Add Meal</button>
       {error && <div className="error">{error}</div>}

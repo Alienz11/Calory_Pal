@@ -8,11 +8,13 @@ import {
   FormContainer,
   Input,
   MutedLink,
+  DisplayError,
   SubmitButton,
 } from "./Collective";
 import { Marginer } from "../marginer/marginMaker";
 
 import { AnimationContext } from "./animationContext";
+import "../../index.css";
 
 export function LoginForm(props) {
   const [email, setEmail] = useState("");
@@ -42,7 +44,6 @@ export function LoginForm(props) {
           onChange={(e) => setPassword(e.target.value)}
           value={password}
         />
-        {error && <div className="error">{error}</div>}
       </FormContainer>
       <Marginer direction="vertical" margin={10} />
       <MutedLink href="#">Forget your password?</MutedLink>
@@ -57,6 +58,7 @@ export function LoginForm(props) {
           Signup
         </BoldLink>
       </MutedLink>
+      <DisplayError>{error}</DisplayError>
     </Container>
   );
 }

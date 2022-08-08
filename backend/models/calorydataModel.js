@@ -8,13 +8,11 @@ const caloryDatasSchema = new Schema(
       type: String,
       required: true,
       trim: true,
-      lowercase: true,
     },
     meal: {
       type: String,
       required: true,
       trim: true,
-      lowercase: true,
     },
     calories: {
       type: Number,
