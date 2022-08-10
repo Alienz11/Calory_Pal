@@ -71,7 +71,7 @@ export function SignupForm(props) {
           Login
         </BoldLink>
       </MutedLink>
-      <DisplayError>{error}</DisplayError>
+      {error && <DisplayError>{error}</DisplayError>}
     </Container>
   );
 }

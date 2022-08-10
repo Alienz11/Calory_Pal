@@ -1,5 +1,4 @@
 import React, { useContext } from "react";
-import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useLogin } from "../../hooks/useLogin";
 import {
@@ -20,13 +19,11 @@ export function LoginForm(props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { login, isLoading, error } = useLogin();
-  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     await login(email, password);
-    navigate("/");
   };
   const { switchToSignup } = useContext(AnimationContext);
   return (
@@ -58,7 +55,7 @@ export function LoginForm(props) {
           Signup
         </BoldLink>
       </MutedLink>
-      <DisplayError>{error}</DisplayError>
+      {error && <DisplayError>{error}</DisplayError>}
     </Container>
   );
 }
