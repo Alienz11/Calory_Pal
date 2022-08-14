@@ -19,15 +19,20 @@ export function SignupForm(props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [comfirm_password, setConfirmPassword] = useState("");
+  const [errpass, setErrpass] = useState(Error());
   const { signup, isLoading, error } = useSignup();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    if (comfirm_password !== password) {
+    try {
+      if (comfirm_password !== password) {
+        throw Error("Passwords don't match each other");
+      }
+    } catch (e) {
+      setErrpass(e);
+      console.error(e);
       throw Error("Passwords don't match each other");
     }
-
     await signup(fullname, email, password);
   };
   const { switchToLogin } = useContext(AnimationContext);
@@ -72,6 +77,7 @@ export function SignupForm(props) {
         </BoldLink>
       </MutedLink>
       {error && <DisplayError>{error}</DisplayError>}
+      <DisplayError>{errpass.message}</DisplayError>
     </Container>
   );
 }
