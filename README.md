@@ -15,5 +15,5 @@ To see deployed app click [CaloryPal](https://calorypal.herokuapp.com/)
 Happy coding :rocket::rocket::grin::grin:
 
 ## References
-[The Net Ninja](https://www.youtube.com/c/TheNetNinja)
-[CoderOne](https://www.youtube.com/c/CoderOne)
+- [The Net Ninja](https://www.youtube.com/c/TheNetNinja)
+- [CoderOne](https://www.youtube.com/c/CoderOne)
