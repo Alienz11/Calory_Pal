@@ -1,69 +1,3 @@
-# # This workflow will build a docker container, publish it to Google Container Registry, and deploy it to GKE when there is a push to the "master" branch.
-# #
-# # To configure this workflow:
-# #
-# # 1. Ensure that your repository contains the necessary configuration for your Google Kubernetes Engine cluster, including deployment.yml, kustomization.yml, service.yml, etc.
-# #
-# # 2. Create and configure a Workload Identity Provider for GitHub (https://github.com/google-github-actions/auth#setting-up-workload-identity-federation)
-# #
-# # 3. Change the values for the GAR_LOCATION, GKE_ZONE, GKE_CLUSTER, IMAGE, REPOSITORY and DEPLOYMENT_NAME environment variables (below).
-# #
-# # For more support on how to run the workflow, please visit https://github.com/google-github-actions/setup-gcloud/tree/master/example-workflows/gke-kustomize
-
-# name: Build and Deploy to GKE
-
-# on:
-#   push:
-#     branches: [ "master" ]
-#   pull_request:
-#     branches: [ "master" ]
-
-# env:
-#   IMAGE_NAME: calorypal_app
-#   IMAGE_TAG: latest
-#   PROJECT_ID: ${{ secrets.PROJECT_ID }}
-#   SERVICE_ACCOUNT_KEY: ${{ secrets.SERVICE_ACCOUNT_KEY }}
-#   #SERVICE_ACCOUNT: ${{ secrets.SERVICE_ACCOUNT }}
-
-# jobs:
-#   build-and-deploy:
-#     runs-on: ubuntu-latest
-#     steps:
-#     - name: Checkout code
-#       uses: actions/checkout@v2
-#     - name: Set up GCloud SDK
-#       uses: google-github-actions/setup-gcloud@master
-#       with:
-#         project_id: ${{ env.PROJECT_ID }}
-#         service_account_key: ${{ env.SERVICE_ACCOUNT_KEY }}
-#         export_default_credentials: true
-#     - name: Build Docker image and push to GCR
-#       env:
-#         IMAGE_NAME: ${{ env.IMAGE_NAME }}
-#         IMAGE_TAG: ${{ env.IMAGE_TAG }}
-#       run: |
-#         docker build \
-#         -t gcr.io/${{ env.PROJECT_ID }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} \
-#         --build-arg MONGO_URI=${{ secrets.MONGO_URI }} \
-#         --build-arg SECRET=${{ secrets.SECRET }} \
-#         .
-#         docker push gcr.io/${{ env.PROJECT_ID }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
-
-
-# ## Maybe needed inbetween line 44 and 45
-# # docker login -u _json_key -p "$(cat ${GOOGLE_APPLICATION_CREDENTIALS})" https://gcr.io
-
-#This workflow will build a docker container, publish it to Google Container Registry, and deploy it to GKE when there is a push to the “main” branch.
-#
-# To configure this workflow:
-#
-# 1. Ensure that your repository contains the necessary configuration for your Google Kubernetes Engine cluster, including deployment.yml, kustomization.yml, service.yml, etc.
-#
-# 2. Create and configure a Workload Identity Provider for GitHub (https://github.com/google-github-actions/auth#setting-up-workload-identity-federation)
-#
-# 3. Change the values for the GAR_LOCATION, GKE_ZONE, GKE_CLUSTER, IMAGE, REPOSITORY and DEPLOYMENT_NAME environment variables (below).
-#
-# For more support on how to run the workflow, please visit https://github.com/google-github-actions/setup-gcloud/tree/master/example-workflows/gke-kustomize
 name: Build and Deploy to GKE
 on:
   push:
@@ -84,9 +18,9 @@ jobs:
     name: Setup, Build, Publish, and Deploy
     runs-on: ubuntu-latest
     environment: production
-    permissions:
-      contents: ‘read’
-      id-token: ‘write’
+    # permissions:
+    #   contents: ‘read’
+    #   id-token: ‘write’
     steps:
     - name: Checkout
       uses: actions/checkout@v3
