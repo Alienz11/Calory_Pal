@@ -18,39 +18,36 @@ jobs:
     name: Setup, Build, Publish, and Deploy
     runs-on: ubuntu-latest
     environment: production
-    # permissions:
-    #   contents: ‘read’
-    #   id-token: ‘write’
     steps:
     - name: Checkout
       uses: actions/checkout@v3
-# authentication via service account
+    # authentication via service account
     - name: Authenticate with Google Cloud
       uses: google-github-actions/auth@v1
       with:
         credentials_json:  ${{ secrets.SERVICE_ACCOUNT_KEY }}
-    - name: ‘Set up Cloud SDK’
-      uses: ‘google-github-actions/setup-gcloud@v1’
+    - name: Set up Cloud SDK
+      uses: google-github-actions/setup-gcloud@v1
       with:
-        version: ‘>= 363.0.0’
+        version: '363.0.0'
     - name: Build Docker Image
       run: |
         docker build \
         -t gcr.io/${{ env.PROJECT_ID }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} \
         --build-arg MONGO_URI=${{ secrets.MONGO_URI }} \
         --build-arg SECRET=${{ secrets.SECRET }} \
+        .
     - name: Configure Docker Client
-      run: |-
+      run: |
         gcloud auth configure-docker --quiet
         gcloud auth configure-docker us-central1-docker.pkg.dev --quiet
     - name: Push Docker Image to Container Registry (GCR)
-      run: |-
-        docker tag $IMAGE_NAME:latest gcr.io/$PROJECT_ID/$IMAGE_NAME:latest
+      run: |
         docker push gcr.io/$PROJECT_ID/$IMAGE_NAME:latest
     # - name: Push Docker Image to Artifact Registry
     #   env:
     #     GIT_TAG: ${{ steps.increment-git-tag.outputs.git-tag }}
-    #   run: |-
+    #   run: |
     #     docker tag $IMAGE_NAME:latest us-central1-docker.pkg.dev/$PROJECT_ID/infra/$IMAGE_NAME:latest
     #     docker tag $IMAGE_NAME:latest us-central1-docker.pkg.dev/$PROJECT_ID/infra/$IMAGE_NAME:$GIT_TAG
     #     docker push us-central1-docker.pkg.dev/$PROJECT_ID/infra/$IMAGE_NAME:latest
