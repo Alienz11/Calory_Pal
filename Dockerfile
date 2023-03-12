@@ -16,6 +16,10 @@ RUN npm install
 COPY frontend/ ./frontend/
 COPY backend/ ./backend/
 
+#Arguments
+ARG MONGO_URI
+ARG SECRET
+
 # Set environment variables
 ENV PORT=4000
 ENV MONGO_URI=$MONGO_URI

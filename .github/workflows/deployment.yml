@@ -3,59 +3,104 @@ name: Build and Deploy to GKE
 on:
   push:
     branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
 
 env:
-  PROJECT_ID: ${{ secrets.GKE_PROJECT }}
-  GAR_LOCATION: us-central1 # TODO: update region of the Artifact Registry
-  GKE_CLUSTER: cluster-1    # TODO: update to cluster name
-  GKE_ZONE: us-central1-c   # TODO: update to cluster zone
-  DEPLOYMENT_NAME: gke-test # TODO: update to deployment name
-  REPOSITORY: yhrepo # TODO: update to Artifact Registry docker repository
-  IMAGE_NAME: calorypal_app
-  IMAGE_TAG: latest
+  DOCKER_HUB_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
+  DOCKER_HUB_PASSWORD: ${{ secrets.DOCKER_HUB_PASSWORD }}
+  MONGO_URI: ${{ secrets.MONGO_URI }}
+  SECRET: ${{ secrets.SECRET }}
 
 jobs:
-  setup-build-publish-deploy:
-    name: Setup, Build, Publish, and Deploy
+  build-and-push:
     runs-on: ubuntu-latest
-    environment: production
-
-    permissions:
-      contents: 'read'
-      id-token: 'write'
-
     steps:
-    - name: Checkout
-      uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-# authentication via service account
+      - name: Login to Docker Hub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ env.DOCKER_HUB_USERNAME }}
+          password: ${{ env.DOCKER_HUB_PASSWORD }}
 
-    - name: Authenticate with Google Cloud
-      uses: google-github-actions/auth@v1
-      with:
-        credentials_json:  ${{ secrets.SERVICE_ACCOUNT_KEY }}
+      - name: Build and push Docker image
+        run: |
+          docker build \
+            --build-arg MONGO_URI="${{ env.MONGO_URI }}" \
+            --build-arg SECRET="${{ env.SECRET }}" \
+            -t ${{ env.DOCKER_HUB_USERNAME }}/calorypal:v2 \
+            .
+          docker push ${{ env.DOCKER_HUB_USERNAME }}/calorypal:v2
+# env:
+#   PROJECT_ID: ${{ secrets.GKE_PROJECT }}
+#   GAR_LOCATION: us-central1 # TODO: update region of the Artifact Registry
+#   GKE_CLUSTER: cluster-1    # TODO: update to cluster name
+#   GKE_ZONE: us-central1-c   # TODO: update to cluster zone
+#   DEPLOYMENT_NAME: gke-test # TODO: update to deployment name
+#   REPOSITORY: yhrepo # TODO: update to Artifact Registry docker repository
+#   IMAGE_NAME: calorypal
 
-    - name: 'Set up Cloud SDK'
-      uses: 'google-github-actions/setup-gcloud@v1'
-      with:
-        version: '>= 363.0.0'
+# jobs:
+#   setup-build-publish-deploy:
+#     name: Setup, Build, Publish, and Deploy
+#     runs-on: ubuntu-latest
+#     environment: production
+
+#     permissions:
+#       contents: 'read'
+#       id-token: 'write'
+
+#     steps:
+#     - name: Checkout
+#       uses: actions/checkout@v3
+
+# # authentication via service account
+
+#     - name: Authenticate with Google Cloud
+#       uses: google-github-actions/auth@v1
+#       with:
+#         credentials_json:  ${{ secrets.SERVICE_ACCOUNT_KEY }}
+
+#     - name: 'Set up Cloud SDK'
+#       uses: 'google-github-actions/setup-gcloud@v1'
+#       with:
+#         version: '>= 363.0.0'
 
 
-    - name: Build Docker Image
-      run: docker build -t $IMAGE_NAME:latest .
+#     - name: Build Docker Image
+#       run: |
+#         docker build \
+#         --build-arg MONGO_URI="${{ secrets.MONGO_URI }}" \
+#         --build-arg SECRET="${{ secrets.SECRET }}" \
+#         -t ${{ env.IMAGE_NAME }}:latest \
+#         .
+#     - name: Automatic Tagging of Releases
+#       id: increment-git-tag
+#       run: |
+#          bash ./scripts/git_update.sh -v major
   
-    - name: Configure Docker Client
-      run: |-
-        gcloud auth configure-docker --quiet
-        gcloud auth configure-docker us-central1-docker.pkg.dev --quiet
+#     - name: Configure Docker Client
+#       run: |-
+#         gcloud auth configure-docker --quiet
+#         gcloud auth configure-docker us-central1-docker.pkg.dev --quiet
   
-    - name: Push Docker Image to Container Registry (GCR)
-      run: |-
-        docker tag ${{ env.IMAGE_NAME }}:latest gcr.io/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE_NAME }}:latest
-        docker push gcr.io/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE_NAME }}:latest
+#     - name: Push Docker Image to Container Registry (GCR)
+#       env:
+#         GIT_TAG: ${{ steps.increment-git-tag.outputs.git-tag }}
+#       run: |-
+#         docker tag $IMAGE_NAME:latest gcr.io/$PROJECT_ID/$IMAGE_NAME:latest
+#         docker tag $IMAGE_NAME:latest gcr.io/$PROJECT_ID/$IMAGE_NAME:$GIT_TAG
+#         docker push gcr.io/$PROJECT_ID/$IMAGE_NAME:latest
+#         docker push gcr.io/$PROJECT_ID/$IMAGE_NAME:$GIT_TAG
     
-    - name: Push Docker Image to Artifact Registry 
-      run: |-
-        docker tag ${{ env.IMAGE_NAME }}:latest us-central1-docker.pkg.dev/${{ env.PROJECT_ID }}/infra/${{ env.IMAGE_NAME }}:latest
-        docker push us-central1-docker.pkg.dev/${{ env.PROJECT_ID }}/infra/${{ env.IMAGE_NAME }}:latest
+#     - name: Push Docker Image to Artifact Registry 
+#       env:
+#         GIT_TAG: ${{ steps.increment-git-tag.outputs.git-tag }}
+#       run: |-
+#         docker tag $IMAGE_NAME:latest us-central1-docker.pkg.dev/$PROJECT_ID/infra/$IMAGE_NAME:latest
+#         docker tag $IMAGE_NAME:latest us-central1-docker.pkg.dev/$PROJECT_ID/infra/$IMAGE_NAME:$GIT_TAG
+#         docker push us-central1-docker.pkg.dev/$PROJECT_ID/infra/$IMAGE_NAME:latest
+#         docker push us-central1-docker.pkg.dev/$PROJECT_ID/infra/$IMAGE_NAME:$GIT_TAG
 
