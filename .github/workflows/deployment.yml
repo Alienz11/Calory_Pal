@@ -104,4 +104,6 @@ jobs:
 #         docker push us-central1-docker.pkg.dev/$PROJECT_ID/infra/$IMAGE_NAME:latest
 #         docker push us-central1-docker.pkg.dev/$PROJECT_ID/infra/$IMAGE_NAME:$GIT_TAG
 #
+#     Infracost test..This is just a silly test
+#
 
